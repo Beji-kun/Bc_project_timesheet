@@ -33,6 +33,22 @@ namespace TimeSheetApp.Server.Controllers
             var usr = await _context.Users.FirstOrDefaultAsync(a => a.ID == id);
             return Ok(usr);
         }
+        //create
+        [HttpPost]
+        public async Task<IActionResult> Post(User usr)
+        {
+            _context.Add(usr);
+            await _context.SaveChangesAsync();
+            return Ok(usr.ID);
+        }
+        //update
+        [HttpPut]
+        public async Task<IActionResult> Put(User usr)
+        {
+            _context.Entry(usr).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
         [HttpDelete("Delete/{id}")]
         public async Task<IActionResult> Delete(int id)
         {
