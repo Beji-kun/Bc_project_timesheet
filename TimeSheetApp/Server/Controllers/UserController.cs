@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TimeSheetApp.Server.Data;
+using TimeSheetApp.Server.Services.Interfaces;
 using TimeSheetApp.Shared.Entities;
 
 namespace TimeSheetApp.Server.Controllers
@@ -14,48 +15,71 @@ namespace TimeSheetApp.Server.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private DatabaseContext _context;
+        private readonly IUser _userService;
+        public UserController(IUser userService)
+        {
+            _userService = userService;
+        }
+        [HttpGet("GetAll")]
+        public async Task<ActionResult<List<Role>>> GetAllRoles()
+        {
+            return Ok(await _userService.GetAllUsers());
+        }
 
-        public UserController(DatabaseContext context)
-        {
-            _context = context;
-        }
-        [HttpGet]
-        public async Task<IActionResult> Get()
-        {
-            var usr = await _context.Users.ToListAsync();
-            return Ok(usr);
-        }
-        // GET: api/Products/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> GetRole(int? id)
         {
-            var usr = await _context.Users.FirstOrDefaultAsync(a => a.ID == id);
-            return Ok(usr);
+            User user = await _userService.GetUserByID(id);
+
+            if (user == null)
+            {
+                return NotFound($"Role with Id {id} doesn't exit");
+            }
+
+            return Ok(user);
         }
-        //create
+
+
+        [HttpGet("GetLastRoleId")]
+        public int GetLastRoleId()
+        {
+            return _userService.GetLastUserId();
+        }
+
         [HttpPost]
-        public async Task<IActionResult> Post(User usr)
+        public async Task<IActionResult> Create([FromBody] User newUser)
         {
-            _context.Add(usr);
-            await _context.SaveChangesAsync();
-            return Ok(usr.ID);
+            User createUser = await _userService.CreateUser(newUser);
+
+            if (createUser != null)
+            {
+                return new CreatedAtActionResult("GerUser", "User", new { createUser.ID }, createUser);
+            }
+            else
+            {
+                return BadRequest("Error occured please try again.");
+            }
         }
-        //update
-        [HttpPut]
-        public async Task<IActionResult> Put(User usr)
+
+        [HttpPost]
+        public IActionResult UpdateRole([FromBody] User user)
         {
-            _context.Entry(usr).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
-            return NoContent();
+            _userService.UpdateUser(user);
+
+            return Ok("Role updated successfully.");
         }
-        [HttpDelete("Delete/{id}")]
-        public async Task<IActionResult> Delete(int id)
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int? id)
         {
-            var usr = new User { ID = id };
-            _context.Remove(usr);
-            await _context.SaveChangesAsync();
-            return NoContent();
+            string result = await _userService.DeleteUser(id);
+
+            if (result == null)
+            {
+                return BadRequest("Role doesn't exit");
+            }
+
+            return Ok("Role deleted successfully");
         }
 
     }

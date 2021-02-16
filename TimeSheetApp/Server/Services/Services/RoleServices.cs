@@ -4,15 +4,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TimeSheetApp.Server.Data;
-using TimeSheetApp.Server.Interfaces;
+using TimeSheetApp.Server.Services.Interfaces;
 using TimeSheetApp.Shared.Entities;
 
-namespace TimeSheetApp.Server.DTOs
+namespace TimeSheetApp.Server.Services.Services
 {
-    public class RoleDTO : IRole
+    public class RoleServices : IRole
     {
         private readonly DatabaseContext _context;
-        public RoleDTO(DatabaseContext context)
+        public RoleServices(DatabaseContext context)
         {
             _context = context;
         }
@@ -46,11 +46,11 @@ namespace TimeSheetApp.Server.DTOs
             }
         }
 
-        public List<Role> GetAllRoles()
+        public async Task<List<Role>> GetAllRoles()
         {
             try
             {
-                return _context.Roles.ToList();
+                return await _context.Roles.ToListAsync();
             }
             catch
             {

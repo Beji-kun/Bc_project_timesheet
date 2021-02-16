@@ -1,10 +1,10 @@
-﻿@page "/Roles"
+﻿@page "/User"
 @using TimeSheetApp.Shared.Entities;
 @inject HttpClient Http
 
-<h3>All Roles</h3>
+<h3>All Users</h3>
 
-@if(AllRoles == null)
+@if (AllUser == null)
 {
     <p>Loading...</p>
 }
@@ -14,15 +14,15 @@ else
         <thead>
             <tr>
                 <td>ID</td>
-                <td>Name</td>
+                <td>FirstName</td>
             </tr>
         </thead>
         <tbody>
-            @foreach (var rl in AllRoles)
+            @foreach (var usr in AllUser)
             {
                 <tr>
-                    <td>@rl.ID</td>
-                    <td>@rl.Name</td>
+                    <td>@usr.ID</td>
+                    <td>@usr.FirstName</td>
                 </tr>
             }
         </tbody>
@@ -30,10 +30,10 @@ else
 }
 
 @code{
-    private List<Role> AllRoles = new List<Role>();
+    private List<User> AllUser = new List<User>();
 
     protected override async Task OnInitializedAsync()
     {
-        AllRoles = await Http.GetFromJsonAsync<List<Role>>("/api/Role/GetAll");
+        AllUser = await Http.GetFromJsonAsync<List<User>>("/api/User/GetAll");
     }
 }

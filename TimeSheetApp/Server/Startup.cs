@@ -7,8 +7,8 @@ using Microsoft.Extensions.Hosting;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using TimeSheetApp.Server.Data;
-using TimeSheetApp.Server.DTOs;
-using TimeSheetApp.Server.Interfaces;
+using TimeSheetApp.Server.Services.Interfaces;
+using TimeSheetApp.Server.Services.Services;
 
 namespace TimeSheetApp.Server
 {
@@ -35,7 +35,7 @@ namespace TimeSheetApp.Server
                      builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()
                         );
             });
-            services.AddTransient<IRole, RoleDTO>();
+            services.AddTransient<IRole, RoleServices>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

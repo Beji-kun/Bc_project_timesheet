@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TimeSheetApp.Server.Interfaces;
+using TimeSheetApp.Server.Services.Interfaces;
 using TimeSheetApp.Shared.Entities;
 
 namespace TimeSheetApp.Server.Controllers
@@ -18,17 +18,11 @@ namespace TimeSheetApp.Server.Controllers
             _roleService = roleService;
         }
         [HttpGet("GetAll")]
-        public IActionResult GetAllRoles()
+        public async Task<ActionResult<List<Role>>> GetAllRoles()
         {
-            List<Role> allRoles = _roleService.GetAllRoles();
-
-            if (allRoles.Count == 0)
-            {
-                return BadRequest("No role exit, try creating a new role");
-            }
-
-            return Ok(allRoles);
+            return Ok(await _roleService.GetAllRoles());
         }
+        
         [HttpGet("{id}")]
         public async Task<IActionResult> GetRole(int? id)
         {
