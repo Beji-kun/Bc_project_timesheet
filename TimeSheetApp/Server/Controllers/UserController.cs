@@ -33,7 +33,7 @@ namespace TimeSheetApp.Server.Controllers
 
             if (user == null)
             {
-                return NotFound($"Role with Id {id} doesn't exit");
+                return NotFound($"User with Id {id} doesn't exit");
             }
 
             return Ok(user);
@@ -53,7 +53,7 @@ namespace TimeSheetApp.Server.Controllers
 
             if (createUser != null)
             {
-                return new CreatedAtActionResult("GerUser", "User", new { createUser.ID }, createUser);
+                return new CreatedAtActionResult("GetUser", "User", new { createUser.ID }, createUser);
             }
             else
             {
@@ -66,7 +66,7 @@ namespace TimeSheetApp.Server.Controllers
         {
             _userService.UpdateUser(user);
 
-            return Ok("Role updated successfully.");
+            return Ok("User updated successfully.");
         }
 
         [HttpDelete("{id}")]
@@ -76,10 +76,10 @@ namespace TimeSheetApp.Server.Controllers
 
             if (result == null)
             {
-                return BadRequest("Role doesn't exit");
+                return BadRequest("User doesn't exit");
             }
 
-            return Ok("Role deleted successfully");
+            return Ok("User deleted successfully");
         }
 
     }

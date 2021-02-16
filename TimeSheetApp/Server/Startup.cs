@@ -36,6 +36,7 @@ namespace TimeSheetApp.Server
                         );
             });
             services.AddTransient<IRole, RoleServices>();
+            services.AddTransient<IUser, UserServices>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
