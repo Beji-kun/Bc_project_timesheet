@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TimeSheetApp.Server.DAL;
+using TimeSheetApp.Server.Data;
 using TimeSheetApp.Shared.Entities;
 
 namespace TimeSheetApp.Server.Controllers

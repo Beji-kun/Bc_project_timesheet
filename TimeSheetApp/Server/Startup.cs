@@ -5,13 +5,16 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Linq;
-using TimeSheetApp.Server.DAL;
 using Microsoft.EntityFrameworkCore;
+using TimeSheetApp.Server.Data;
+using TimeSheetApp.Server.DTOs;
+using TimeSheetApp.Server.Interfaces;
 
 namespace TimeSheetApp.Server
 {
     public class Startup
     {
+        readonly string AllowedOrigin = "allowedOrigin";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -27,6 +30,12 @@ namespace TimeSheetApp.Server
             options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddControllersWithViews();
             services.AddRazorPages();
+            services.AddCors(option => {
+                option.AddPolicy("allowedOrigin",
+                     builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()
+                        );
+            });
+            services.AddTransient<IRole, RoleDTO>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -5,13 +5,13 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using TimeSheetApp.Server.DAL;
+using TimeSheetApp.Server.Data;
 
 namespace TimeSheetApp.Server.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20210210104042_Initial")]
-    partial class Initial
+    [Migration("20210216170403_Initial2")]
+    partial class Initial2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,21 +20,6 @@ namespace TimeSheetApp.Server.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.3")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("ProjectUser", b =>
-                {
-                    b.Property<int>("ProjectsID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UsersID")
-                        .HasColumnType("int");
-
-                    b.HasKey("ProjectsID", "UsersID");
-
-                    b.HasIndex("UsersID");
-
-                    b.ToTable("ProjectUser");
-                });
 
             modelBuilder.Entity("TimeSheetApp.Shared.Entities.Company", b =>
                 {
@@ -61,7 +46,7 @@ namespace TimeSheetApp.Server.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Companies");
+                    b.ToTable("Company");
                 });
 
             modelBuilder.Entity("TimeSheetApp.Shared.Entities.Project", b =>
@@ -74,7 +59,7 @@ namespace TimeSheetApp.Server.Migrations
                     b.Property<string>("Comment")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("CompanyID")
+                    b.Property<int>("CompanyID")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("DateCreate")
@@ -140,6 +125,21 @@ namespace TimeSheetApp.Server.Migrations
                     b.ToTable("Timesheets");
                 });
 
+            modelBuilder.Entity("TimeSheetApp.Shared.Entities.TimesheetUser", b =>
+                {
+                    b.Property<int>("UserID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TimeSheetID")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserID", "TimeSheetID");
+
+                    b.HasIndex("TimeSheetID");
+
+                    b.ToTable("TimesheetUsers");
+                });
+
             modelBuilder.Entity("TimeSheetApp.Shared.Entities.User", b =>
                 {
                     b.Property<int>("ID")
@@ -171,7 +171,7 @@ namespace TimeSheetApp.Server.Migrations
                     b.Property<byte[]>("PasswordSalt")
                         .HasColumnType("varbinary(max)");
 
-                    b.Property<int?>("RoleID")
+                    b.Property<int>("RoleID")
                         .HasColumnType("int");
 
                     b.HasKey("ID");
@@ -181,41 +181,28 @@ namespace TimeSheetApp.Server.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("TimesheetUser", b =>
+            modelBuilder.Entity("TimeSheetApp.Shared.Entities.UserProject", b =>
                 {
-                    b.Property<int>("TimesheetsID")
+                    b.Property<int>("UserID")
                         .HasColumnType("int");
 
-                    b.Property<int>("UsersID")
+                    b.Property<int>("ProjectID")
                         .HasColumnType("int");
 
-                    b.HasKey("TimesheetsID", "UsersID");
+                    b.HasKey("UserID", "ProjectID");
 
-                    b.HasIndex("UsersID");
+                    b.HasIndex("ProjectID");
 
-                    b.ToTable("TimesheetUser");
-                });
-
-            modelBuilder.Entity("ProjectUser", b =>
-                {
-                    b.HasOne("TimeSheetApp.Shared.Entities.Project", null)
-                        .WithMany()
-                        .HasForeignKey("ProjectsID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TimeSheetApp.Shared.Entities.User", null)
-                        .WithMany()
-                        .HasForeignKey("UsersID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.ToTable("UserProjects");
                 });
 
             modelBuilder.Entity("TimeSheetApp.Shared.Entities.Project", b =>
                 {
                     b.HasOne("TimeSheetApp.Shared.Entities.Company", "Company")
-                        .WithMany()
-                        .HasForeignKey("CompanyID");
+                        .WithMany("Projects")
+                        .HasForeignKey("CompanyID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("TimeSheetApp.Shared.Entities.Timesheet", null)
                         .WithMany("Projects")
@@ -224,28 +211,63 @@ namespace TimeSheetApp.Server.Migrations
                     b.Navigation("Company");
                 });
 
+            modelBuilder.Entity("TimeSheetApp.Shared.Entities.TimesheetUser", b =>
+                {
+                    b.HasOne("TimeSheetApp.Shared.Entities.Timesheet", "Timesheets")
+                        .WithMany("TimesheetUsers")
+                        .HasForeignKey("TimeSheetID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TimeSheetApp.Shared.Entities.User", "Users")
+                        .WithMany("TimesheetUsers")
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Timesheets");
+
+                    b.Navigation("Users");
+                });
+
             modelBuilder.Entity("TimeSheetApp.Shared.Entities.User", b =>
                 {
                     b.HasOne("TimeSheetApp.Shared.Entities.Role", "Role")
                         .WithMany("Users")
-                        .HasForeignKey("RoleID");
+                        .HasForeignKey("RoleID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Role");
                 });
 
-            modelBuilder.Entity("TimesheetUser", b =>
+            modelBuilder.Entity("TimeSheetApp.Shared.Entities.UserProject", b =>
                 {
-                    b.HasOne("TimeSheetApp.Shared.Entities.Timesheet", null)
-                        .WithMany()
-                        .HasForeignKey("TimesheetsID")
+                    b.HasOne("TimeSheetApp.Shared.Entities.Project", "Projects")
+                        .WithMany("UserProjects")
+                        .HasForeignKey("ProjectID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TimeSheetApp.Shared.Entities.User", null)
-                        .WithMany()
-                        .HasForeignKey("UsersID")
+                    b.HasOne("TimeSheetApp.Shared.Entities.User", "Users")
+                        .WithMany("UserProjects")
+                        .HasForeignKey("UserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Projects");
+
+                    b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("TimeSheetApp.Shared.Entities.Company", b =>
+                {
+                    b.Navigation("Projects");
+                });
+
+            modelBuilder.Entity("TimeSheetApp.Shared.Entities.Project", b =>
+                {
+                    b.Navigation("UserProjects");
                 });
 
             modelBuilder.Entity("TimeSheetApp.Shared.Entities.Role", b =>
@@ -256,6 +278,15 @@ namespace TimeSheetApp.Server.Migrations
             modelBuilder.Entity("TimeSheetApp.Shared.Entities.Timesheet", b =>
                 {
                     b.Navigation("Projects");
+
+                    b.Navigation("TimesheetUsers");
+                });
+
+            modelBuilder.Entity("TimeSheetApp.Shared.Entities.User", b =>
+                {
+                    b.Navigation("TimesheetUsers");
+
+                    b.Navigation("UserProjects");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace TimeSheetApp.Shared.Entities
+namespace TimeSheetApp.Server.DTOs
 {
-    public class User
+    public class UserDTO
     {
-        [Key]
         public int ID { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -22,8 +19,8 @@ namespace TimeSheetApp.Shared.Entities
         public byte[] PasswordHash { get; set; }
         public byte[] PasswordSalt { get; set; }
         public int RoleID { get; set; }
-        public Role Role { get; set; }
-        public IList<UserProject> UserProjects;
-        public IList<TimesheetUser> TimesheetUsers;
+        public RoleDTO Role { get; set; }
+        //public IList<UserProject> UserProjects;
+        //public IList<TimesheetUser> TimesheetUsers;
     }
 }

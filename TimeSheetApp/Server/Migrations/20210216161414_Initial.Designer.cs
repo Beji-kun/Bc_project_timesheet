@@ -3,49 +3,23 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TimeSheetApp.Server.Data;
 
 namespace TimeSheetApp.Server.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20210216161414_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.3")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("TimeSheetApp.Shared.Entities.Company", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Email")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("Organization")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("Company");
-                });
 
             modelBuilder.Entity("TimeSheetApp.Shared.Entities.Project", b =>
                 {
@@ -56,9 +30,6 @@ namespace TimeSheetApp.Server.Migrations
 
                     b.Property<string>("Comment")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("CompanyID")
-                        .HasColumnType("int");
 
                     b.Property<DateTime>("DateCreate")
                         .HasColumnType("datetime2");
@@ -72,14 +43,7 @@ namespace TimeSheetApp.Server.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("TimesheetID")
-                        .HasColumnType("int");
-
                     b.HasKey("ID");
-
-                    b.HasIndex("CompanyID");
-
-                    b.HasIndex("TimesheetID");
 
                     b.ToTable("Projects");
                 });
@@ -97,45 +61,6 @@ namespace TimeSheetApp.Server.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("Roles");
-                });
-
-            modelBuilder.Entity("TimeSheetApp.Shared.Entities.Timesheet", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("EndWork")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Notes")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("StartWork")
-                        .HasColumnType("datetime2");
-
-                    b.Property<decimal>("TotalHours")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("Timesheets");
-                });
-
-            modelBuilder.Entity("TimeSheetApp.Shared.Entities.TimesheetUser", b =>
-                {
-                    b.Property<int>("UserID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TimeSheetID")
-                        .HasColumnType("int");
-
-                    b.HasKey("UserID", "TimeSheetID");
-
-                    b.HasIndex("TimeSheetID");
-
-                    b.ToTable("TimesheetUsers");
                 });
 
             modelBuilder.Entity("TimeSheetApp.Shared.Entities.User", b =>
@@ -194,40 +119,6 @@ namespace TimeSheetApp.Server.Migrations
                     b.ToTable("UserProjects");
                 });
 
-            modelBuilder.Entity("TimeSheetApp.Shared.Entities.Project", b =>
-                {
-                    b.HasOne("TimeSheetApp.Shared.Entities.Company", "Company")
-                        .WithMany("Projects")
-                        .HasForeignKey("CompanyID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TimeSheetApp.Shared.Entities.Timesheet", null)
-                        .WithMany("Projects")
-                        .HasForeignKey("TimesheetID");
-
-                    b.Navigation("Company");
-                });
-
-            modelBuilder.Entity("TimeSheetApp.Shared.Entities.TimesheetUser", b =>
-                {
-                    b.HasOne("TimeSheetApp.Shared.Entities.Timesheet", "Timesheets")
-                        .WithMany("TimesheetUsers")
-                        .HasForeignKey("TimeSheetID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TimeSheetApp.Shared.Entities.User", "Users")
-                        .WithMany("TimesheetUsers")
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Timesheets");
-
-                    b.Navigation("Users");
-                });
-
             modelBuilder.Entity("TimeSheetApp.Shared.Entities.User", b =>
                 {
                     b.HasOne("TimeSheetApp.Shared.Entities.Role", "Role")
@@ -258,11 +149,6 @@ namespace TimeSheetApp.Server.Migrations
                     b.Navigation("Users");
                 });
 
-            modelBuilder.Entity("TimeSheetApp.Shared.Entities.Company", b =>
-                {
-                    b.Navigation("Projects");
-                });
-
             modelBuilder.Entity("TimeSheetApp.Shared.Entities.Project", b =>
                 {
                     b.Navigation("UserProjects");
@@ -273,17 +159,8 @@ namespace TimeSheetApp.Server.Migrations
                     b.Navigation("Users");
                 });
 
-            modelBuilder.Entity("TimeSheetApp.Shared.Entities.Timesheet", b =>
-                {
-                    b.Navigation("Projects");
-
-                    b.Navigation("TimesheetUsers");
-                });
-
             modelBuilder.Entity("TimeSheetApp.Shared.Entities.User", b =>
                 {
-                    b.Navigation("TimesheetUsers");
-
                     b.Navigation("UserProjects");
                 });
 #pragma warning restore 612, 618
