@@ -49,14 +49,7 @@ namespace TimeSheetApp.Server.Services.Services
 
         public async Task<List<User>> GetAllUsers()
         {
-            try
-            {
-                return await _context.Users.ToListAsync();
-            }
-            catch
-            {
-                throw new NotImplementedException();
-            }
+            return await _context.Users.ToListAsync();
         }
 
         public int GetLastUserId()

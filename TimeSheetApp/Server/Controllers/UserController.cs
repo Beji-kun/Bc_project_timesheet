@@ -21,7 +21,7 @@ namespace TimeSheetApp.Server.Controllers
             _userService = userService;
         }
         [HttpGet("GetAll")]
-        public async Task<ActionResult<List<Role>>> GetAllRoles()
+        public async Task<ActionResult<List<Role>>> GetAllUsers()
         {
             return Ok(await _userService.GetAllUsers());
         }

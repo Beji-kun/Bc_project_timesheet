@@ -14,7 +14,7 @@ namespace TimeSheetApp.Server
 {
     public class Startup
     {
-        readonly string AllowedOrigin = "allowedOrigin";
+        //readonly string AllowedOrigin = "allowedOrigin";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
