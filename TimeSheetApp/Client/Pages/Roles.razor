@@ -14,7 +14,6 @@ else
     <table class="table">
         <thead>
             <tr>
-                <th>ID</th>
                 <th>Name</th>
             </tr>
         </thead>
@@ -22,7 +21,6 @@ else
             @foreach (var role in AllRoles)
             {
                 <tr>
-                    <td><a href="/Role/@role.ID"> @role.ID</a></td>
                     <td>$@role.Name</td>
                 </tr>
             }

@@ -43,8 +43,8 @@ namespace TimeSheetApp.Server.Controllers
         }
 
 
-        [HttpGet("GetLastAccountId")]
-        public int GetLastAccountId()
+        [HttpGet("GetLastRoleId")]
+        public int GetLastRoleId()
         {
             return _roleService.GetLastRoleId();
         }
@@ -52,11 +52,11 @@ namespace TimeSheetApp.Server.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] Role newRole)
         {
-            Role createdAccount = await _roleService.CreateRole(newRole);
+            Role createRole = await _roleService.CreateRole(newRole);
 
-            if (createdAccount != null)
+            if (createRole != null)
             {
-                return new CreatedAtActionResult("GetRole", "Role", new { createdAccount.ID }, createdAccount);
+                return new CreatedAtActionResult("GetRole", "Role", new { createRole.ID }, createRole);
             }
             else
             {
@@ -65,9 +65,9 @@ namespace TimeSheetApp.Server.Controllers
         }
 
         [HttpPost]
-        public IActionResult UpdateAccount([FromBody] Role account)
+        public IActionResult UpdateRole([FromBody] Role role)
         {
-            _roleService.UpdateRole(account);
+            _roleService.UpdateRole(role);
 
             return Ok("Role updated successfully.");
         }
