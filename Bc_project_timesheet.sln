@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31005.135
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeSheetApp.Server", "TimeSheetApp\Server\TimeSheetApp.Server.csproj", "{DB367251-A32F-4A58-B574-40F5BEE63A2A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimeSheetApp.Server", "TimeSheetApp\Server\TimeSheetApp.Server.csproj", "{DB367251-A32F-4A58-B574-40F5BEE63A2A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeSheetApp.Client", "TimeSheetApp\Client\TimeSheetApp.Client.csproj", "{78D74301-2431-4768-947F-F5AFAEE682B8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimeSheetApp.Client", "TimeSheetApp\Client\TimeSheetApp.Client.csproj", "{78D74301-2431-4768-947F-F5AFAEE682B8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeSheetApp.Shared", "TimeSheetApp\Shared\TimeSheetApp.Shared.csproj", "{3BCF3708-69F3-4FA6-8524-568E1FC32C4F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimeSheetApp.Shared", "TimeSheetApp\Shared\TimeSheetApp.Shared.csproj", "{3BCF3708-69F3-4FA6-8524-568E1FC32C4F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

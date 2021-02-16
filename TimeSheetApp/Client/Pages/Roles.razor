@@ -1,0 +1,45 @@
+﻿@page "/Roles"
+@using TimeSheetApp.Shared.Entities;
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+@inject IJSRuntime js
+
+<h3>Roles</h3>
+@if (AllRoles.Count == 0)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var role in AllRoles)
+            {
+                <tr>
+                    <td><a href="/Role/@role.ID"> @role.ID</a></td>
+                    <td>$@role.Name</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}
+
+
+
+@code {
+    private List<Role> AllRoles = new List<Role>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        AllRoles = await Http.GetFromJsonAsync<List<Role>>("Role/GetAll");
+    }
+
+
+}

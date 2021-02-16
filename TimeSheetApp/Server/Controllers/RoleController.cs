@@ -17,7 +17,7 @@ namespace TimeSheetApp.Server.Controllers
         {
             _roleService = roleService;
         }
-        [HttpGet]
+        [HttpGet("GetAll")]
         public IActionResult GetAllRoles()
         {
             List<Role> allRoles = _roleService.GetAllRoles();
