@@ -16,7 +16,6 @@ namespace TimeSheetApp.Client.Services.Services
         {
             _http = http;
         }
-
         public async Task LoadUsers()
         {
             Users = await _http.GetFromJsonAsync<List<User>>("api/User");

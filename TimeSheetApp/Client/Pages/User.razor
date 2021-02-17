@@ -2,9 +2,9 @@
 @using TimeSheetApp.Shared.Entities;
 @inject HttpClient Http
 
-<h3>All Users</h3>
+<h3>All User List</h3>
 
-@if (AllUser == null)
+@if (AllUsers == null)
 {
     <p>Loading...</p>
 }
@@ -14,15 +14,15 @@ else
         <thead>
             <tr>
                 <td>ID</td>
-                <td>First name</td>
+                <td>Name</td>
             </tr>
         </thead>
         <tbody>
-            @foreach (var usr in AllUser)
+            @foreach (var usr in AllUsers)
             {
                 <tr>
-                    @*<td>@usr.ID</td>
-                    <td>@usr.FirstName</td>*@
+                    <td>@usr.ID</td>
+                    <td>@rl.Name</td>
                 </tr>
             }
         </tbody>
@@ -30,10 +30,10 @@ else
 }
 
 @code{
-    private List<User> AllUser = new List<User>();
+    private List<User> AllUsers = new List<User>();
 
     protected override async Task OnInitializedAsync()
     {
-        AllUser = await Http.GetFromJsonAsync<List<User>>("/api/User/GetAll");
+        AllUsers = await Http.GetFromJsonAsync<List<User>>("/api/User/GetAll");
     }
 }
