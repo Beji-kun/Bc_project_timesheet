@@ -13,10 +13,13 @@ else
     <thead>
         <tr>
             <td>ID</td>
-            <td>Name</td>
-            <td>Date</td>
-            <td>lastA</td>
-            <td>role</td>
+            <td>First Name</td>
+            <td>Last Name</td>
+            <td>Email</td>
+            <td>Gender</td>
+            <td>Date of birth</td>
+            <td>Last Active</td>
+            <td>Role</td>
         </tr>
     </thead>
     <tbody>
@@ -24,15 +27,19 @@ else
         {
             @foreach (var rl in AllRoles)
             {
-                <tr>
-                    <td>@usr.ID</td>
-                    <td>@usr.FirstName</td>
-                    <td>@usr.DateOfBirth.ToString("dd/MM/yyy")</td>
-                    <td>@usr.LastActive.ToString("dd/MM/yyy, HH:mm:ss")</td>
-                    <td>@usr.RoleID</td>
-                </tr>
+        <tr>
+            <td>@usr.ID</td>
+            <td>@usr.FirstName</td>
+            <td>@usr.LastName</td>
+            <td>@usr.Email</td>
+            <td>@usr.Gender</td>
+            <td>@usr.DateOfBirth.ToString("dd/MM/yyy")</td>
+            <td>@usr.LastActive.ToString("dd/MM/yyy HH:mm:ss")</td>
+            <td>@if (usr.RoleID == rl.ID) { rl.Name.ToString(); } else { <p>Error</p> }</td>
+
+       </tr>
             }
-        }
+        }B
     </tbody>
 </table>
 }
@@ -47,15 +54,10 @@ else
         AllRoles = await Http.GetFromJsonAsync<List<Role>>("/api/Role/GetAll");
     }
 
-    private string RoleName(Role role, TimeSheetApp.Shared.Entities.User user)
-    {
-        if (user.RoleID == role.ID)
-        {
-            return (role.Name);
-        }
-        else
-            return "Error";
-    }
+    //private static IEnumerable<Role> RoleName(int roleID)
+    //{
+
+    //}
 
 
 }
