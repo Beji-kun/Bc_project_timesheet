@@ -21,7 +21,7 @@ namespace TimeSheetApp.Server.Controllers
             _userService = userService;
         }
         [HttpGet("GetAll")]
-        public async Task<ActionResult<List<Role>>> GetAllUsers()
+        public async Task<ActionResult<List<User>>> GetAllUsers()
         {
             return Ok(await _userService.GetAllUsers());
         }
@@ -62,7 +62,7 @@ namespace TimeSheetApp.Server.Controllers
         }
 
         [HttpPost]
-        public IActionResult UpdateRole([FromBody] User user)
+        public IActionResult UpdateUser([FromBody] User user)
         {
             _userService.UpdateUser(user);
 

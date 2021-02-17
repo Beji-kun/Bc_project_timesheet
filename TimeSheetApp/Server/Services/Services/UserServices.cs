@@ -34,14 +34,14 @@ namespace TimeSheetApp.Server.Services.Services
 
         public async Task<string> DeleteUser(int? id)
         {
-            User UserToDelete = await GetUserByID(id);
-            if (UserToDelete == null)
+            User roleToDelete = await GetUserByID(id);
+            if (roleToDelete == null)
             {
                 return null;
             }
             else
             {
-                _context.Users.Remove(UserToDelete);
+                _context.Users.Remove(roleToDelete);
                 await _context.SaveChangesAsync();
                 return "User deleted successfully";
             }
@@ -49,7 +49,14 @@ namespace TimeSheetApp.Server.Services.Services
 
         public async Task<List<User>> GetAllUsers()
         {
-            return await _context.Users.ToListAsync();
+            try
+            {
+                return await _context.Users.ToListAsync();
+            }
+            catch
+            {
+                throw new NotImplementedException();
+            }
         }
 
         public int GetLastUserId()
@@ -62,30 +69,31 @@ namespace TimeSheetApp.Server.Services.Services
 
         public async Task<User> GetUserByID(int? id)
         {
-            User User = await _context.Users.FindAsync(id);
+            User user = await _context.Users.FindAsync(id);
 
-            if (User == null)
+            if (user == null)
             {
                 return null;
             }
-            return User;
+            return user;
         }
 
-        public void UpdateUser(User User)
+        public void UpdateUser(User user)
         {
             var local = _context.Set<User>()
                    .Local
-                   .FirstOrDefault(entry => entry.ID.Equals(User.ID));
+                   .FirstOrDefault(entry => entry.ID.Equals(user.ID));
 
             if (local != null)
             {
                 _context.Entry(local).State = EntityState.Detached;
             }
 
-            _context.Entry(User).State = EntityState.Modified;
+            _context.Entry(user).State = EntityState.Modified;
 
-            _context.Users.Update(User);
+            _context.Users.Update(user);
             _context.SaveChanges();
         }
     }
 }
+
