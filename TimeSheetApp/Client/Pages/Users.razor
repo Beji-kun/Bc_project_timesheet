@@ -3,7 +3,7 @@
 @inject HttpClient Http
 
 <h3>All User List</h3>
-if (AllUsers == null)
+@if (AllUsers == null)
 {
 <p>Loading...</p>
 }
@@ -14,25 +14,48 @@ else
         <tr>
             <td>ID</td>
             <td>Name</td>
+            <td>Date</td>
+            <td>lastA</td>
+            <td>role</td>
         </tr>
     </thead>
     <tbody>
-        @foreach (var rl in AllUsers)
+        @foreach (var usr in AllUsers)
         {
-            <tr>
-                <td>@rl.ID</td>
-                <td>@rl.</td>
-            </tr>
+            @foreach (var rl in AllRoles)
+            {
+                <tr>
+                    <td>@usr.ID</td>
+                    <td>@usr.FirstName</td>
+                    <td>@usr.DateOfBirth.ToString("dd/MM/yyy")</td>
+                    <td>@usr.LastActive.ToString("dd/MM/yyy, HH:mm:ss")</td>
+                    <td>@usr.RoleID</td>
+                </tr>
+            }
         }
     </tbody>
 </table>
 }
 
 @code{
-    private List<User> AllUsers = new List<User>();
+    private List<TimeSheetApp.Shared.Entities.User> AllUsers = new List<TimeSheetApp.Shared.Entities.User>();
+    private List<Role> AllRoles = new List<Role>();
 
     protected override async Task OnInitializedAsync()
     {
-        AllUsers = await Http.GetFromJsonAsync<List<User>>("/api/User/GetAll");
+        AllUsers = await Http.GetFromJsonAsync<List<TimeSheetApp.Shared.Entities.User>>("/api/User/GetAll");
+        AllRoles = await Http.GetFromJsonAsync<List<Role>>("/api/Role/GetAll");
     }
+
+    private string RoleName(Role role, TimeSheetApp.Shared.Entities.User user)
+    {
+        if (user.RoleID == role.ID)
+        {
+            return (role.Name);
+        }
+        else
+            return "Error";
+    }
+
+
 }
