@@ -4,11 +4,12 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using TimeSheetApp.Client.Services.Interfaces;
 using TimeSheetApp.Shared.Entities;
 
 namespace TimeSheetApp.Client.Services.Services
 {
-    public class UserServices
+    public class UserServices : IUser
     {
         private readonly HttpClient _http;
         public List<User> Users { get; set; } = new List<User>();

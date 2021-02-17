@@ -1,0 +1,38 @@
+﻿@page "/Users"
+@using TimeSheetApp.Shared.Entities;
+@inject HttpClient Http
+
+<h3>All User List</h3>
+if (AllUsers == null)
+{
+<p>Loading...</p>
+}
+else
+{
+<table class="table">
+    <thead>
+        <tr>
+            <td>ID</td>
+            <td>Name</td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var rl in AllUsers)
+        {
+            <tr>
+                <td>@rl.ID</td>
+                <td>@rl.</td>
+            </tr>
+        }
+    </tbody>
+</table>
+}
+
+@code{
+    private List<User> AllUsers = new List<User>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        AllUsers = await Http.GetFromJsonAsync<List<User>>("/api/User/GetAll");
+    }
+}
